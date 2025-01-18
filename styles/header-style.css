@@ -1,0 +1,70 @@
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #32a852, #1e3f91);
+    padding: 20px;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+
+    font-family: Artifika, serif;
+    text-align: center;
+    font-size: 22px;
+    color: #fff;
+    text-shadow: rgb(0, 0, 0) 2px 2px 2px;
+    text-align: center;
+    margin: auto;
+}
+
+.header .logo .football {
+    color: #f4c10b;
+    position: relative;
+}
+
+
+.header .nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.header .nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.header .nav a:hover {
+    color: #f4c10b;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        width: 768px;
+    }
+
+    .header .nav {
+        margin-top: 10px;
+        gap: 10px;
+    }
+}

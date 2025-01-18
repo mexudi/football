@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid with Images</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/header-style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo" onclick="window.location.href='/'">
+            <span class="football">Football</span>Ma
+        </div>
+    </header>
+    <div>
+        <div class="selectedPlayer" data-v-f12d18f4="">
+            <div>
+                <div class="playerImage" data-v-f12d18f4="">
+                    <img src="static\images\86833.png" alt="Image 1">
+                </div>
+                <div class="skip">
+                    <h3>Skip</h3>
+                </div>
+            </div>
+        </div>
+        <div class="grid-container">
+            <!-- Grid items for teams -->
+            <div class="grid-item" data-team="RSB" data-valid-players="4,5">
+                <img src="static/images/rsb-128x128.png" alt="RSB">
+            </div>
+            <div class="grid-item" data-team="WAC" data-valid-players="1,2">
+                <img src="static/images/wac-99x128.png" alt="WAC">
+            </div>
+            <div class="grid-item" data-team="DHJ" data-valid-players="3,6">
+                <img src="static/images/dhj-128x128.png" alt="DHJ">
+            </div>
+            <div class="grid-item" data-team="FAR" data-valid-players="7,8">
+                <img src="static/images/far-128x128.png" alt="FAR">
+            </div>
+            <div class="grid-item" data-team="FUS" data-valid-players="9,10">
+                <img src="static/images/fus-128x128.png" alt="FUS">
+            </div>
+            <div class="grid-item" data-team="HUSA" data-valid-players="11,12">
+                <img src="static/images/husa-128x128.png" alt="HUSA">
+            </div>
+            <div class="grid-item" data-team="IRT" data-valid-players="2,4">
+                <img src="static/images/irt-128x128.png" alt="IRT">
+            </div>
+            <div class="grid-item" data-team="JSS" data-valid-players="5,9">
+                <img src="static/images/jss-128x128.png" alt="JSS">
+            </div>
+            <div class="grid-item" data-team="MAS" data-valid-players="3,7">
+                <img src="static/images/mas-128x128.png" alt="MAS">
+            </div>
+            <div class="grid-item" data-team="MAT" data-valid-players="6,8">
+                <img src="static/images/mat-128x128.png" alt="MAT">
+            </div>
+            <div class="grid-item" data-team="OCS" data-valid-players="10,12">
+                <img src="static/images/ocs-128x128.png" alt="OCS">
+            </div>
+            <div class="grid-item" data-team="RAC" data-valid-players="1,11">
+                <img src="static/images/rac-128x128.png" alt="RAC">
+            </div>
+        </div>
+</body>
+
+<p id="message"></p>
+
+<script>
+    let players = [];
+    let currentPlayerIndex = 0;
+
+    // Fetch players from the backend
+    fetch("/players")
+        .then(response => response.json())
+        .then(data => {
+            players = data;
+            displayCurrentPlayer();
+        })
+        .catch(err => console.error("Error fetching players:", err));
+
+    function displayCurrentPlayer() {
+        console.log('Hello from displayCurrentPlayer');
+            const playerImage = document.querySelector(".playerImage img");
+            console.log(playerImage);
+        if (currentPlayerIndex < players.length) {
+            const currentPlayer = players[currentPlayerIndex];
+            // document.getElementById("currentPlayer").textContent = currentPlayer;
+            playerImage.src = currentPlayer;
+        } else {
+            document.getElementById("message").textContent = "All players matched!";
+        }
+    }
+
+    document.querySelector(".skip").addEventListener("click", () => {
+    // Move to the next player in the list
+    currentPlayerIndex++;
+
+    // If the player index exceeds the number of players, reset to the first player
+    if (currentPlayerIndex >= players.length) {
+        currentPlayerIndex = 0;
+    }
+
+    // Display the next player
+    displayCurrentPlayer();
+});
+    // Handle grid item click
+    document.querySelectorAll(".grid-item").forEach(item => {
+        item.addEventListener("click", () => {
+            if (currentPlayerIndex < players.length) {
+                const validPlayers = item.dataset.validPlayers.split(",").map(Number);
+                console.log(validPlayers);
+                const currentPlayer = players[currentPlayerIndex];
+                console.log(currentPlayer);
+                console.log(currentPlayer.number);
+                console.log(validPlayers.includes(currentPlayer.number));
+                console.log(currentPlayerIndex);
+                console.log(validPlayers.includes(currentPlayerIndex + 1));
+
+                if (validPlayers.includes(currentPlayerIndex + 1)) {
+                    // Replace the image with the player's name and number
+                    // console.log(item);
+                    // item.innerHTML = `<strong>${currentPlayer}</strong>`;
+                    // console.log(currentPlayer);
+                    const imgElement = item.querySelector("img");
+                    imgElement.src = `${currentPlayer}`;
+
+                    // Move to the next player
+                    currentPlayerIndex++;
+                    displayCurrentPlayer();
+                } else {
+                    item.style.transition = "box-shadow 0.3s ease";
+                    item.style.boxShadow = "0 0 20px red";
+
+                        setTimeout(() => {
+                    item.style.boxShadow = ""; // Reset the shadow
+                }, 500);
+                }
+            }
+        });
+    });
+</script>
+</html>
